@@ -1,0 +1,27 @@
+.advancedSpinner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(127,127,127, 0.5);
+  display: none;
+}
+
+.advancedSpinner-showed {
+  display: block;
+}
+
+.advancedSpinner-spinner {
+  border: 1px solid #0000ff;
+  height: 200px;
+  width: 200px;
+  margin: 0 auto;
+}
+
+.advancedSpinner-messages {
+  width: 200px;
+  height: 20px;
+  margin: 0 auto;
+  border: 1px solid #00ff00;
+}
