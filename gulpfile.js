@@ -54,4 +54,6 @@ gulp.task('watch', function () {
     gulp.watch(path.src.sass, ["dist:styles"]);
 });
 
-gulp.task("default", runSequence("dist:clean", ["dist:js", "dist:styles"], "watch"));
+gulp.task("default", function (done) {
+    runSequence("dist:clean", "dist:js", "dist:styles", "watch", done);
+});
