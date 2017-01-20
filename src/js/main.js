@@ -8,6 +8,9 @@
 ;(function( $, window, document, undefined ) {
     "use strict";
 
+    const pluginName = "advancedSpinner",
+        dataKey = "plugin_" + pluginName;
+
     const Process = function () {
         this.count = 0;
         this.message = undefined;
@@ -42,7 +45,7 @@
         },
 
         isAnyProcessRunning: function () {
-           return $.isEmptyObject(this.processes);
+           return !$.isEmptyObject(this.processes);
         },
 
         getProcesses: function () {
