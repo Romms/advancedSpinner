@@ -28,8 +28,10 @@
             if (typeof this.$container === 'undefined') {
                 this.$container = $(
                     '<div class="advancedSpinner">' +
-                        '<div class="advancedSpinner-spinner"></div>' +
-                        '<ul class="advancedSpinner-messages"></ul>' +
+                        '<div class="advancedSpinner-wrapper">' +
+                            '<div class="advancedSpinner-spinner"></div>' +
+                            '<ul class="advancedSpinner-messages"></ul>' +
+                        '</div>' +
                     '</div>'
                 );
                 if (this.options.spinner instanceof $) {
@@ -64,7 +66,7 @@
 
             // TODO: check access by link!!
             // TODO: this._trigger('started', processName, Object.assign({}, this.processes[processName]));
-            this._trigger('started', processName, this.processes[processName]);
+            this._trigger('started', [processName, this.processes[processName]]);
             this._refreshView();
         },
 
@@ -75,7 +77,7 @@
 
                 do {
                     this.processes[processName].count--;
-                    this._trigger('finished', processName, this.processes[processName]);
+                    this._trigger('finished', [processName, this.processes[processName]]);
                 } while (force && this.processes[processName].count > 0);
 
                 if (this.processes[processName].count <= 0) {
@@ -108,7 +110,6 @@
             this.$container.remove();
             delete this.$container;
             this._debug('Spinner has been destroyed');
-
         },
 
         _refreshView: function () {
@@ -120,13 +121,17 @@
         },
 
         _show: function () {
-            // TODO: add showing messages
             var $messages = this.$container.find('.advancedSpinner-messages');
+            $messages.empty();
+
             $.each(this.processes, function (processName, process) {
-                var $li = $('<li />');
-                $li.text(process.message);
-                $messages.append
+                if (process.message) {
+                    var $li = $('<li />');
+                    $li.text(process.message);
+                    $messages.append($li);
+                }
             });
+
             this.$container.addClass('advancedSpinner-showed');
             this.$container.removeClass('advancedSpinner-hidden');
             this._debug('Spinner has been showed');
@@ -140,7 +145,7 @@
 
         _trigger: function(type, data) {
             this.$element.trigger(this.options.eventPrefix + type, data);
-            this._debug('Event %s is triggered', type, 'Data:', data);
+            this._debug('Event "%s" is triggered.', type, 'Data: ', data);
         },
 
         _debug: function() {
@@ -189,7 +194,7 @@
     $.fn[pluginName].defaults = {
         freezeSize: true,
         debug: false,
-        spinner: $('<div />'),
+        spinner: $('<div class="advancedSpinner-spinner-default"/>'),
         eventPrefix: ''
     };
 
