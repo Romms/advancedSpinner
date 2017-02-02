@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="../dist/jquery.advancedSpinner.js"></script>
+    <link href="../dist/jquery.advancedSpinner.min.css" rel="stylesheet" />
+    <style>
+        body {
+            font-size: 15pt;
+            line-height: 1.5em;
+            padding: 3em;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        loadPageContent();
+
+        function loadPageContent() {
+            let $spinnerContainer = $('body');
+            $spinnerContainer.advancedSpinner({
+                template: $(
+                    '<div class="advancedSpinner-wrapper advancedSpinner-theme-default">' +
+                        '<div class="advancedSpinner-background">' +
+                            '<div class="advancedSpinner-spinner">' +
+                            '<div class="advancedSpinner-spinner-image"></div>' +
+                            '</div>' +
+                            '<ul class="advancedSpinner-messages" advancedSpinner-messages-container></ul>' +
+                        '</div>' +
+                    '</div>'
+                )
+            });
+            // Show spinner
+            $spinnerContainer.advancedSpinner('start', 'fetching', 'Fetching data...');
+
+            fetch('https://baconipsum.com/api/?type=all-meat&paras=3&start-with-lorem=1&format=html')
+                .then(function(response) {
+                    if (response.status !== 200) {
+                        alert('Looks like there was a problem. Status Code: ' + response.status);
+
+                        // Hide spinner on wrong status code
+                        $spinnerContainer.advancedSpinner('finish', 'fetching');
+                    } else {
+                        response.text().then(function(data) {
+                            setTimeout(function() {
+                                $('#content').html(data);
+
+                                // Hide spinner after fetching data
+                                $spinnerContainer.advancedSpinner('finish', 'fetching');
+                            }, 800);
+                        });
+                    }
+
+                })
+                .catch(function(error) {
+                    alert('Request failed: ' + error);
+
+                    // Hide spinner on any Exceptions
+                    $spinnerContainer.advancedSpinner('finish', 'fetching');
+                });
+        }
+
+    </script>
+    <div id="content"></div>
+</body>
+</html>
