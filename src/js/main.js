@@ -26,18 +26,16 @@
         _init: function () {
             this.processes = {};
             if (typeof this.$container === 'undefined') {
-                this.$container = $(
-                    '<div class="advancedSpinner">' +
-                        '<div class="advancedSpinner-wrapper">' +
-                            '<div class="advancedSpinner-spinner"></div>' +
-                            '<ul class="advancedSpinner-messages"></ul>' +
-                        '</div>' +
-                    '</div>'
-                );
-                if (this.options.spinner instanceof $) {
-                    this.$container.find('.advancedSpinner-spinner').append(this.options.spinner);
+                this.$container = $('<div class="advancedSpinner" />');
+
+                if (this.options.template instanceof $) {
+                    this.$container.append(this.options.template.clone());
+                } else {
+                    this._debug('ERROR: Template should be jQuery object!')
                 }
+
                 this.$element.append(this.$container);
+                this.$messagesContainer = this.$container.find('[advancedSpinner-messages-container]');
             }
             this._debug('Initialization done');
         },
@@ -93,7 +91,7 @@
         },
 
         finishAll: function () {
-            var hasStarted = false;
+            let hasStarted = false;
             $.each(this.processes, function (processName) {
                 hasStarted = true;
                 this.finish(processName, true);
@@ -121,14 +119,14 @@
         },
 
         _show: function () {
-            var $messages = this.$container.find('.advancedSpinner-messages');
-            $messages.empty();
+            let $messagesContainer = this.$messagesContainer;
+            $messagesContainer.empty();
 
             $.each(this.processes, function (processName, process) {
                 if (process.message) {
-                    var $li = $('<li />');
+                    let $li = $('<li />');
                     $li.text(process.message);
-                    $messages.append($li);
+                    $messagesContainer.append($li);
                 }
             });
 
@@ -150,7 +148,7 @@
 
         _debug: function() {
             if (this.options.debug) {
-                var args = Array.prototype.slice.call(arguments);
+                let args = Array.prototype.slice.call(arguments);
                 if (typeof arguments[0] === 'string') {
                     args[0] = '[' + pluginName + ']: ' + arguments[0];
                 } else {
@@ -163,11 +161,11 @@
 
 
     $.fn[pluginName] = function(options) {
-        var result,
+        let result,
             restArgs = Array.prototype.slice.call(arguments, 1);
 
         this.each(function () {
-            var instance = $(this).data(dataKey);
+            let instance = $(this).data(dataKey);
 
             if (instance instanceof Plugin === false) {
                 instance = new Plugin(this, options);
@@ -194,7 +192,16 @@
     $.fn[pluginName].defaults = {
         freezeSize: true,
         debug: false,
-        spinner: $('<div class="advancedSpinner-spinner-default"/>'),
+        template: $(
+            '<div class="advancedSpinner-wrapper advancedSpinner-theme-default">' +
+                '<div class="advancedSpinner-background">' +
+                    '<div class="advancedSpinner-spinner">' +
+                        '<div class="advancedSpinner-spinner-image"></div>' +
+                    '</div>' +
+                    '<ul class="advancedSpinner-messages" advancedSpinner-messages-container></ul>' +
+                '</div>' +
+            '</div>'
+        ),
         eventPrefix: ''
     };
 

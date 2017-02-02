@@ -1,4 +1,5 @@
 .advancedSpinner {
+  html > &,
   body > & {
     position: fixed;
   }
@@ -8,57 +9,64 @@
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: rgba(255, 255, 255, 0.7);
   display: none;
 
   &-showed {
     display: block;
   }
+}
 
-  &-wrapper {
-    top: 50%;
-    left: 50%;
-    transform: translate3d(-50%, -50%, 0);
-    position: absolute;
+.advancedSpinner-wrapper.advancedSpinner-theme-default {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: table;
 
-    .advancedSpinner-messages {
-      margin: 0;
-      padding: 0;
-      font-size: 12pt;
+  background: rgba(250, 250, 250, 0.5);
+
+  .advancedSpinner-background {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .advancedSpinner-messages {
+    margin: 0;
+    padding: 0;
+    font-size: 12pt;
+    color: #333;
+    font-family: Tahoma, Arial, sans-serif;
+
+    li {
+      list-style: none;
+      background-color: rgba(220, 220, 220, .6);
+      padding: .2em 1em;
+      border-radius: 0.3em;
+      margin: .5em auto;
+      display: table;
       color: #333;
-      font-family: Tahoma, Arial, sans-serif;
-
-      li {
-        list-style: none;
-        background-color: rgba(220, 220, 220, .6);
-        padding: .2em 1em;
-        border-radius: 0.3em;
-        margin: .5em auto;
-        display: table;
-        color: #333;
-        text-align: center;
-      }
+      text-align: center;
     }
+  }
 
-    .advancedSpinner-spinner {
-      margin: 0 auto;
-    }
-
-    .advancedSpinner-spinner-default {
-      font-size: 9pt;
-      margin: 60px auto;
-      width: 1em;
-      height: 1em;
-      border-radius: 50%;
-      position: relative;
-      text-indent: -9999em;
-      animation: advancedSpinner-spinner-default 1.3s infinite linear;
-      transform: translateZ(0);
-    }
+  .advancedSpinner-spinner {
+    font-size: 9pt;
+    margin: 60px auto;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    position: relative;
+    text-indent: -9999em;
+    animation: advancedSpinner-default-animation 1.3s infinite linear;
+    transform: translateZ(0);
   }
 }
 
-@keyframes advancedSpinner-spinner-default {
+@keyframes advancedSpinner-default-animation {
   0%,
   100% {
     box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;
