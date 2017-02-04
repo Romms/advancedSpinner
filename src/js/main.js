@@ -45,7 +45,7 @@
         },
 
         isAnyProcessRunning: function () {
-           return !$.isEmptyObject(this.processes);
+            return !$.isEmptyObject(this.processes);
         },
 
         getProcesses: function () {
@@ -119,6 +119,23 @@
         },
 
         _show: function () {
+            this._redrawMessages();
+            this.$container.addClass('advancedSpinner-showed');
+            this.$container.removeClass('advancedSpinner-hidden');
+            if (this.options.freezeSize) {
+                this._freezeSize();
+            }
+            this._debug('Spinner has been showed');
+        },
+
+        _hide: function () {
+            this.$container.removeClass('advancedSpinner-showed');
+            this.$container.addClass('advancedSpinner-hidden');
+            this._unfreezeSize();
+            this._debug('Spinner has been hidden');
+        },
+
+        _redrawMessages: function () {
             let $messagesContainer = this.$messagesContainer;
             $messagesContainer.empty();
 
@@ -129,16 +146,18 @@
                     $messagesContainer.append($li);
                 }
             });
-
-            this.$container.addClass('advancedSpinner-showed');
-            this.$container.removeClass('advancedSpinner-hidden');
-            this._debug('Spinner has been showed');
         },
 
-        _hide: function () {
-            this.$container.removeClass('advancedSpinner-showed');
-            this.$container.addClass('advancedSpinner-hidden');
-            this._debug('Spinner has been hidden');
+        _freezeSize: function () {
+            let height = this.$container.height();
+            let width = this.$container.width();
+            this.$container.css('min-height', height + 'px');
+            this.$container.css('min-width', width + 'px');
+        },
+
+        _unfreezeSize: function () {
+            this.$container.css('min-height', 0);
+            this.$container.css('min-width', 0);
         },
 
         _trigger: function(type, data) {
