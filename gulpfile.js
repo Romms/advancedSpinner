@@ -10,7 +10,8 @@ var gulp = require("gulp"),
     debug = require('gulp-debug'),
     prettyError = require('gulp-prettyerror'),
     del = require('del'),
-    runSequence = require('run-sequence');
+    runSequence = require('run-sequence'),
+    babel = require('gulp-babel');
 
 var path = {
     src: {
@@ -24,6 +25,9 @@ gulp.task("dist:js", function () {
         .pipe(prettyError())
         .pipe(debug())
         .pipe(sourcemaps.init())
+        .pipe(babel({
+            presets: ['es2015']
+        }))
         .pipe(concat("jquery.advancedSpinner.js"))
         .pipe(gulp.dest("dist"))
         .pipe(rename("jquery.advancedSpinner.min.js"))
